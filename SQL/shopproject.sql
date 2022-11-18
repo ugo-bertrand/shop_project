@@ -30,6 +30,10 @@ CREATE TABLE companies (
 );
 
 
+CREATE TABLE categories (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    categoryName VARCHAR(100) NOT NULL
+);
 
 CREATE TABLE products (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -37,7 +41,9 @@ CREATE TABLE products (
     price FLOAT NOT NULL,
     description VARCHAR(1000) NOT NULL,
     companyId INT,
-    FOREIGN KEY (companyId) REFERENCES companies(id)
+    FOREIGN KEY (companyId) REFERENCES companies(id),
+    categoryId INT,
+    FOREIGN KEY (categoryId) REFERENCES categories(id)
 );
 
 CREATE TABLE notices (
