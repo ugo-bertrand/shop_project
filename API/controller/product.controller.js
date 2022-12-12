@@ -135,12 +135,12 @@ exports.findByCompany = (req,result) =>{
             message:"Il n'y a pas de produits pour cette entreprise : " + req.params.companyName
         });
         return;
-    })
-}
+    });
+};
 
 //method to return a product based on its category
 exports.findByCategory = (req,result) =>{
-    //TODO
+    
 }
 
 //method to update a product
