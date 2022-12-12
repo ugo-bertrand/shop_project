@@ -37,7 +37,7 @@ exports.createCompany = (req,result) =>{
 
 //method to return all companies in the database
 exports.findAll = (req,result) =>{
-    db.query("select * fromm companies",(error,res) =>{
+    db.query("select * from companies",(error,res) =>{
         if(error){
             result.status(500).send({
                 message:"Une erreur est survenue lors de l'envoie de la requête."
