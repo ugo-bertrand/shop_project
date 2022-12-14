@@ -140,15 +140,73 @@ exports.findByCompany = (req,result) =>{
 
 //method to return a product based on its category
 exports.findByCategory = (req,result) =>{
-    
-}
+    db.query(`select * from products join categories on categories.id = products.categoryId where categories.name = ${req.params.categoryName}`,(error,res) => {
+        if(error){
+            result.status(500).send({
+                message:"Une erreur est survenue lors de l'envoie de la requête."
+            });
+            console.log("Error : " + error);
+            return;
+        }
+        if(res.length){
+            result.status(200).send(res);
+            return;
+        }
+        result.status(404).send({
+            message:"Il n'y a pas de produits dans la catégories : " + req.params.categoryName
+        });
+    });
+};
 
 //method to update a product
 exports.updateProductById = (req,result) =>{
-    //TODO
+    if(Object.keys(req.body).length === 0){
+        result.status(404).send({
+            message:"Le contenu ne doit pas être vide."
+        });
+        return;
+    }
+    const product = {
+        ...req.body
+    }
+    db.query(`update from products set productName = ${product.productName}, price = ${product.price}, description = ${product.description}, companyId = ${product.companyId}, categoryId = ${product.categoryId} where id = ${req.params.productId}`,(error,res) =>{
+        if(error){
+            result.status(500).send({
+                message:"Une erreur est survenue lors de l'envoie de la requête."
+            });
+            console.log("Error : " + error);
+            return;
+        }
+        if(res.affectedRows === 0){
+            result.status(404).send({
+                message:"Il n'y a pas de produits avec l'ID : " + req.params.productId + " ."
+            });
+            return;
+        }
+        result.status(200).send({
+            message:"Le produit a bien été modifier."
+        })
+    })
 }
 
 //method to delete a product
 exports.deleteProductById = (req,result) =>{
-    //TODO
-}
+    db.query(`delete from products where id = ${req.params.productId}`, (error,res) => {
+        if(error){
+            result.status(500).send({
+                message:"Une erreur est survenue lors de l'envoie de la requête."
+            });
+            console.log("Error : " + error);
+            return;
+        }
+        if(res.affectedRows === 0){
+            result.status(404).send({
+                message:"Il n'y a pas de produits avec l'ID : " + req.params.productId + " ."
+            });
+            return;
+        }
+        result.status(200).send({
+            message:"Le produit a bien été modifier."
+        });
+    });
+};
