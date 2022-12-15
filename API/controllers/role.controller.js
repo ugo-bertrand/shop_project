@@ -21,7 +21,7 @@ exports.createRole = (req, result) => {
                 message: "Une erreur est survenue lors de l'envoie de la requête."
             });
             console.log(display + " : Une erreur est survene lors de l'envoie de la requête. (api/roles/addRole)")
-            console.error(" Error : " + error);
+            console.error(error);
             return;
         }
         if (!res) {
@@ -49,7 +49,7 @@ exports.findAll = (req, result) => {
                 message: "Une erreur est survenue lors de l'envoie de la requête."
             });
             console.log(display + " : Une erreur est survenue lors de l'envoie de la requête. (api/roles/)");
-            console.error("Error : " + error);
+            console.error(error);
             return;
         }
         if (res.length) {
@@ -75,7 +75,7 @@ exports.findByRoleName = (req, result) => {
                 message:"Une erreur est survenue lors de l'envoie de la requête."
             });
             console.log(display + " : Une erreur est survenue lors de l'envoie de la requête (api/roles/:name)");
-            console.error("Error : " + error);
+            console.error(error);
             return;
         }
         if(res.length){
@@ -107,13 +107,13 @@ exports.updateById = (req,result) =>{
         ...req.body
     };
 
-    db.query(`UPDATE roles SET roleName = ${role.roleName} WHERE id = ${req.params.id}`, (error,res) => {
+    db.query(`UPDATE roles SET roleName = '${role.roleName}' WHERE id = ${req.params.id}`, (error,res) => {
         if(error){
             result.status(500).send({
                 message:"Une erreur est survenue lors de l'envoie de la requête."
             });
             console.log(display + " : Une erreur est survenue lors de l'envoie de la requête. (api/roles/update/:id");
-            console.error("Error : " +  error);
+            console.error(error);
             return;
         }
         if(res.affectedRows === 0){
@@ -127,6 +127,34 @@ exports.updateById = (req,result) =>{
             message:"Le role avec l'ID : " + req.params.id + " a bien été modifier."
         });
         console.log(display + " : Le role avec l'ID : " + req.params.id + " a bien été modifier.");
+        return;
+    });
+};
+
+exports.deleteById = (req,result) => {
+    const date = new Date();
+    const display = "[" + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " | " + date.getHours() + ":" +
+        date.getMinutes() + ":" + date.getSeconds() + "]";
+    db.query(`DELETE FROM roles WHERE id = ${req.params.id}`, (error,res) =>{
+        if(error){
+            result.status(500).send({
+                message:"Une erreur est survenue lors de l'envoie de la requête."
+            });
+            console.log(display + " : Une erreur est survenue lors de l'envoie de la requête. (/api/roles/delete/:id");
+            console.error(error);
+            return;
+        }
+        if(res.affectedRows === 0){
+            result.status(404).send({
+                message:"Il n'y a pas de roles avec l'ID : " + req.params.id + "."
+            });
+            console.log(display + " : Il n'y a pas de roles avec l'ID : " + req.params.id + ".");
+            return;
+        }
+        result.status(200).send({
+            message:"Le role avec l'ID : " + req.params.id + " a bien été supprimer."
+        });
+        console.log(display + " : Le role avec l'ID : " + req.params.id + " a bien été supprimer.");
         return;
     });
 };
