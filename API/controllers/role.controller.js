@@ -1,7 +1,8 @@
 const db = require("../db.js");
-const date = require("../date.js");
+const dateFile = require("../date.js");
 
 exports.createRole = (req, result) => {
+    var date = dateFile.GetDate(new Date)
     if (Object.keys(req.body).length === 0) {
         result.status(404).send({
             message: "Le contenu ne doit pas être vide."
@@ -38,6 +39,7 @@ exports.createRole = (req, result) => {
 };
 
 exports.findAll = (req, result) => {
+    var date = dateFile.GetDate(new Date());
     db.query("SELECT * FROM roles", (error, res) => {
         if (error) {
             result.status(500).send({
@@ -61,6 +63,7 @@ exports.findAll = (req, result) => {
 };
 
 exports.findByRoleName = (req, result) => {
+    var date = dateFile.GetDate(new Date());
     db.query(`SELECT * FROM roles where roleName = ${req.params.name}`, (error,res) => {
         if(error){
             result.status(500).send({
@@ -84,6 +87,7 @@ exports.findByRoleName = (req, result) => {
 };
 
 exports.updateById = (req,result) =>{
+    var date = dateFile.GetDate(new Date());
     if(Object.keys(req.body).length === 0){
         result.status(404).send({
             message:"Le contenu ne doit pas être vide."
@@ -121,6 +125,7 @@ exports.updateById = (req,result) =>{
 };
 
 exports.deleteById = (req,result) => {
+    var date = dateFile.GetDate(new Date());
     db.query(`DELETE FROM roles WHERE id = ${req.params.id}`, (error,res) =>{
         if(error){
             result.status(500).send({

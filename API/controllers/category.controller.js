@@ -1,7 +1,8 @@
 const db = require("../db.js");
-const date = require("../date.js");
+const dateFile = require("../date.js");
 
 exports.createCategory = (req,result) =>{
+    var date = dateFile.GetDate(new Date());
     if(Object.keys(req.body).length === 0){
         result.status(404).send({
             message:"Le contenu ne doit pas être vide."
@@ -36,6 +37,7 @@ exports.createCategory = (req,result) =>{
 };
 
 exports.findAll = (req,result) =>{
+    var date = dateFile.GetDate(new Date());
     db.query("SELECT * FROM categories", (error,res) => {
         if(error){
             result.status(500).send({
@@ -59,6 +61,7 @@ exports.findAll = (req,result) =>{
 };
 
 exports.updateById = (req,result) => {
+    var date = dateFile.GetDate(new Date());
     if(Object.keys(req.body).length === 0){
         result.status(404).send({
             message:"Le contenu ne doit pas être vide."
@@ -96,6 +99,7 @@ exports.updateById = (req,result) => {
 };
 
 exports.deleteById = (req,result) => {
+    var date = dateFile.GetDate(new Date());
     db.query(`DELETE FROM categories WHERE id = ${req.params.id}`, (error,res) => {
         if(error){
             result.status(500).send({
