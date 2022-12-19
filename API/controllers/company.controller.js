@@ -73,9 +73,52 @@ exports.updateById = (req,result) => {
     const company = {
         ...req.body
     }
-    
-}
+    db.query(`UPDATE companies SET name = ${company.name}, place = ${company.place}, email = ${company.email} WHERE id = ${req.params.id}`, (error,res) =>{
+        if(error){
+            result.status(500).send({
+                message:"Une erreur est survenue lors de l'envoie de la requête."
+            });
+            console.log(date + " : Une erreur est survenue lors de l'envoie de la requête (api/companies/update/:id).");
+            console.log(error);
+            return;
+        }
+        if(res.affectedRows === 0){
+            result.status(404).send({
+                message:"Il n'y a pas d'entreprises avec l'ID : " + req.params.id + " ."
+            });
+            console.log(date + " : Il n'y a pas d'entreprises avec l'ID : " + req.params.id + " (api/companies/update/:id).");
+            return;
+        }
+        result.status(200).send({
+            message:"L'entreprise avec l'ID : " + req.params.id + " a bien été modifier." 
+        });
+        console.log(date + " : L'entreprise avec l'ID : " + req.params.id + " a bien été modifier (api/companies/update/:id).");
+        return;
+    }); 
+};
 
 exports.deleteById = (req,result) => {
-
-}
+    var date = dateFile.GetDate(new Date());
+    db.query(`DELETE FROM companies WHERE id = ${req.params.id}`, (error,res) => {
+        if(error){
+            result.status(500).send({
+                message:"Une erreur est survenue lors de l'envoie de la requête."
+            });
+            console.log(date + " : Une erreur est survenue lors de l'envoie de la requête (api/companies/delete/:id).");
+            console.log(error);
+            return;
+        }
+        if(res.affectedRows === 0){
+            result.status(404).send({
+                message:"Il n'y a pas d'entreprises avec l'ID : " + req.params.id + " ."
+            });
+            console.log(date + " : Il n'y a pas d'entreprises avec l'ID : " + req.params.id + " (api/companies/delete/:id).");
+            return;
+        }
+        result.status(200).send({
+            message:"L'entreprise avec l'ID : " + req.params.id + " a bien été supprimer."
+        });
+        console.log("L'entreprise avec l'ID : " + req.params.id + " a bien été supprimer (api/companies/delete/:id).");
+        return;
+    });
+};
