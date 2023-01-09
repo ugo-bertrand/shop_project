@@ -24,6 +24,8 @@ var roleRoutes = require("./routes/role.routes.js");
 var userRoutes = require("./routes/user.routes.js");
 var companyRoutes = require("./routes/company.routes.js");
 var categoryRoutes = require("./routes/role.routes.js");
+var noticeRoutes = require("./routes/notice.routes.js");
+var productRoutes = require("./routes/product.routes.js");
 
 
 app.use(helmet());
@@ -34,5 +36,7 @@ app.use("/api/roles", roleRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/companies", companyRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/notices", noticeRoutes);
+app.use("/api/products", productRoutes);
 
 module.exports = app;
