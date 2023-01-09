@@ -39,7 +39,7 @@ exports.createProduct = (req,result) => {
 
 exports.findAll = (req,result) => {
     var date = dateFile.GetDate(new Date());
-    db.query("SELECT * FROM products",(res,error) => {
+    db.query("SELECT * FROM products",(error,res) => {
         if(error){
             result.status(500).send({
                 message:"Une erreur est survenue lors de l'envoie de la requête."
@@ -62,9 +62,64 @@ exports.findAll = (req,result) => {
 }
 
 exports.updateById = (req,result) => {
-
-}
+    var date = dateFile.GetDate(new Date());
+    if(Object.keys(req.body).length === 0){
+        result.status(404).send({
+            message:"Le contenu ne doit pas être vide."
+        });
+        console.log(date + " : Le contenu est vide la requête ne peut pas être envoyer (api/products/update/:id).");
+        return;
+    }
+    const product = {
+        ...req.body
+    }
+    db.query(`UPDATE products SET productName = '${product.productName}', price = ${product.price}, description = ${product.description},
+     companyId = ${product.companyId}, categoryId = ${product.categoryId} WHERE id = ${req.params.id}`,(error,res) => {
+        if(error){
+            result.status(500).send({
+                message:"Une erreur est survenue lors de l'envoie de la requête."
+            });
+            console.log(date + " : Une erreur est survenue lors de l'envoie de la requête (api/produts/update/:id)");
+            console.log(error);
+            return;
+        }
+        if(res.affectedRows === 0){
+            result.status(404).send({
+                message:"Il n'y a pas de produits avec l'ID : " + req.params.id + " ."
+            });
+            console.log(date + " : Il n'y a pas de produits avec l'ID : " + req.params.id + " (api/products/update/:id).");
+            return;
+        }
+        result.status(200).send({
+            message:"Le produit avec l'ID : " + req.params.id + " a bien été modifier."
+        });
+        console.log(date + " : Le produit avec l'ID : " + req.params.id + " a bien été modifier (api/products/update/:id).");
+        return;
+     });
+};
 
 exports.deleteById = (req,result) => {
-
+    var date = dateFile.GetDate(new Date());
+    db.query(`DELETE FROM products WHERE id = ${req.params.id}`,(error,res) => {
+        if(error){
+            result.status(500).send({
+                message:"Une erreur est survenue lors de l'envoie de la requête."
+            });
+            console.log(date + " : Une erreur est survenue lors de l'envoie de la requête (api/products/delete/:id).");
+            console.log(error);
+            return;
+        }
+        if(res.affectedRows === 0){
+            result.status(404).send({
+                message:"Il n'y a pas de produits avec l'ID :" + req.params.id + " ."
+            });
+            console.log(date + " : Il n'y a pas de produits avec l'ID : " + req.params.id + " (api/products/delete/:id).");
+            return;
+        }
+        result.status(200).send({
+            message:"Le produit avec l'ID : " + req.params.id + " a bien été supprimer."
+        });
+        console.log(date + " : Le produit avec l'ID : " + req.params.id + " a bien été supprimer (api/products/delete/:id).");
+        return;
+    })
 }
