@@ -64,7 +64,7 @@ exports.findAll = (req, result) => {
 
 exports.findByRoleName = (req, result) => {
     var date = dateFile.GetDate(new Date());
-    db.query(`SELECT * FROM roles where roleName = ${req.params.name}`, (error,res) => {
+    db.query(`SELECT * FROM roles where roleName = '${req.params.name}'`, (error,res) => {
         if(error){
             result.status(500).send({
                 message:"Une erreur est survenue lors de l'envoie de la requête."

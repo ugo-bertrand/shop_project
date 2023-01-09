@@ -153,15 +153,19 @@ exports.login = (req,result) => {
                 console.log("User id : " + id);
                 const passwordOk =  bcrypt.compareSync(req.body.clearPassword,hashPassword);
                 if(passwordOk){
-                    const token = jwt.sign({ id },process.env.SECRET_KEY, {
-                        expiresIn: 80000
-                    });
-                    
                     const user = {
                         id: res[0].id,
                         email: res[0].email
                     };
-                    result.cookie("jwt")
+                    const token = jwt.sign({ user },process.env.SECRET_KEY, {
+                        expiresIn: 80000
+                    });
+                    result.cookie("jwt");
+                    result.status(200).send({
+                        token: jwt.sign({user}, process.env.SECRET_KEY,{
+                            expiresIn:"24h"
+                        }),
+                    });
                 }
                 else{
                     result.status(400).send({
@@ -183,5 +187,10 @@ exports.login = (req,result) => {
 }
 
 exports.logout = (req,result) => {
-
+    var date = dateFile.GetDate(new Date());
+    result.clearCookie("jwt");
+    result.status(200).send({
+        message:"L'utilisateur a été déconnecter."
+    });
+    console.log(date + " : Déconnexion d'un utilisateur (api/users/logout).");
 }
