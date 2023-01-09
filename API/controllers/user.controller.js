@@ -151,7 +151,7 @@ exports.login = (req, result) => {
             try {
                 const { password: hashPassword, id } = res[0];
                 console.log("User id : " + id);
-                const passwordOk = bcrypt.compareSync(req.body.clearPassword, hashPassword);
+                const passwordOk = bcrypt.compareSync(req.body.password, hashPassword);
                 if (passwordOk) {
                     const user = {
                         id: res[0].id,
